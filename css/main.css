@@ -1,0 +1,10 @@
+@import url('./fonts.css');
+
+@import url('./_variables.css');
+
+html {
+    background: url('../assets/img/fondo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100%;
+    overflow: hidden;
+}

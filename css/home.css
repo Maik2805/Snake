@@ -3,7 +3,7 @@
 .site-main .game-title {
     text-align: center;
     margin: auto;
-    padding-top: 4rem;
+    padding-top: 3%;
 }
 
 .site-main .game-title h1 {
@@ -21,7 +21,7 @@
     /* display: flex; */
     text-align: center;
     margin: auto;
-    padding-top: 4rem;
+    padding-top: 6%;
     /* vertical-align: auto; */
 }
 

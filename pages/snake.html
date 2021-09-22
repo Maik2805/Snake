@@ -19,17 +19,28 @@
 <body>
     <main class="site-main">
         <section class="menu">
-            <button class="button button5"><i class="fas fa-bars"></i></button>
+            <a href="./.."><button class="button button5"> <i class="fas fa-bars"></i></button></a>
             <div class="game-title">
                 <h1>SNAKE GAME</h1>
             </div>
         </section>
         <section class="game">
-            <div id="canvas-holder"></div>
             <center>
-                <script src="../js/snake.js"></script>
+                <div class="info-game" id="div-info-game">
+                    <div class="info-game-item al-left div-lives">
+                        <label for=""><i class="fas fa-heart fa-2x heart"></i></label>
+                        <label for=""></label><i class="fas fa-heart fa-2x heart"></i></label>
+                        <label for=""></label><i class="fas fa-heart fa-2x heart"></i></label>
+                    </div>
+                    <div class="info-game-item al-right div-puntaje">
+                        <h3 id="lbl-score"></h3>
+                    </div>
+                </div>
+                <div id="canvas-holder">
+                    <script src="../js/snake.js"></script>
+                </div>
+                <!-- <canvas id="juegoCanvas" width="500" height="500"></canvas> -->
             </center>
-            <!-- <canvas id="juegoCanvas" width="500" height="500"></canvas> -->
         </section>
     </main>
     <!-- <script src="../js/jquery-3.6.0.min.js"></script> -->

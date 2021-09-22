@@ -5,13 +5,13 @@
 // 	if (max == null || first(lista)>max) return mayorL(rest(lista),first(lista))
 // 	return mayorL(rest(lista),max)
 // }
-function menorL(lista){
-	if(isEmpty(lista))
+function menorL(lista) {
+	if (isEmpty(lista))
 		return null
-	if(length(lista) == 1)
+	if (length(lista) == 1)
 		return first(lista);
-	if(first(lista) < first(rest(lista)))
-		return menorL(cons(first(lista),rest(rest(lista))))
+	if (first(lista) < first(rest(lista)))
+		return menorL(cons(first(lista), rest(rest(lista))))
 	return menorL(rest(lista))
 
 }
@@ -25,13 +25,13 @@ function menorL(lista){
  * @Example mayorL([2,3,1]) -> Return 3
  * @Example mayorL([-3,-2,-1]) -> Return -1
  */
-function mayorL(lista){
-	if(isEmpty(lista))
+function mayorL(lista) {
+	if (isEmpty(lista))
 		return null
-	if(length(lista) == 1)
+	if (length(lista) == 1)
 		return first(lista);
-	if(first(lista) > first(rest(lista)))
-		return mayorL(cons(first(lista),rest(rest(lista))))
+	if (first(lista) > first(rest(lista)))
+		return mayorL(cons(first(lista), rest(rest(lista))))
 	return mayorL(rest(lista))
 
 }
@@ -50,8 +50,8 @@ function mayorL(lista){
  * @Example sumaLista([2,3,1]) -> Return 6
  * @Example sumaLista([-3,-2,-1]) -> Return -6
  */
-function sumaLista(lista){
-	if(isEmpty(lista)) return 0
+function sumaLista(lista) {
+	if (isEmpty(lista)) return 0
 	return first(lista) + sumaLista(rest(lista))
 }
 /**
@@ -63,7 +63,7 @@ function sumaLista(lista){
  * @Example promedio([2,3,1]) -> Return 2
  * @Example promedio([5,10,15]) -> Return 10
  */
-function promedio(lista){
+function promedio(lista) {
 	if (isEmpty(lista)) return null
 	return sumaLista(lista) / length(lista)
 }
@@ -91,28 +91,28 @@ function concat(lista1, lista2) {
 // console.log(concat([3,5],[]))
 // console.log(concat([1,2,true],['FDP',3,8,2,7]))
 
-function invertirCicle(input){
+function invertirCicle(input) {
 	var ret = new Array;
-    for(var i = input.length-1; i >= 0; i--) {
-        ret.push(input[i]);
-    }
-    return ret;
+	for (var i = input.length - 1; i >= 0; i--) {
+		ret.push(input[i]);
+	}
+	return ret;
 }
 
 
-function appendMC(lista,add){
+function appendMC(lista, add) {
 	// console.log('add: '+ add)
-	if(isList(add)){
-		if(isEmpty(lista)){
-			if(isEmpty(add)){
+	if (isList(add)) {
+		if (isEmpty(lista)) {
+			if (isEmpty(add)) {
 				return add
 			}
 			// if(length(add)==1){
 			// 	return lista
 			// }
-			return appendMC(lista,rest(add))
+			return appendMC(lista, rest(add))
 		}
-		return cons(first(lista),appendMC(rest(lista),add))
+		return cons(first(lista), appendMC(rest(lista), add))
 	}
 }
 // function appendM(lista,add){
@@ -138,15 +138,15 @@ function appendMC(lista,add){
 // console.log( append([1,2,3],4))
 // // console.log( appendMC([1,2,3],[4,5,6,7,8]))
 // // console.log( append([1,2,3],[4,5,6,7,8]))
-function lastItem(lista){
-	if(isEmpty(lista)) return lista
-	if(length(lista) == 1) return first(lista)
+function lastItem(lista) {
+	if (isEmpty(lista)) return lista
+	if (length(lista) == 1) return first(lista)
 	return lastItem(rest(lista))
 }
-function invertir(lista){
-	if(isEmpty(lista)) return lista
+function invertir(lista) {
+	if (isEmpty(lista)) return lista
 	// if(length(lista) == 1) return first(lista)
-	return cons(lastItem(lista),invertir(rest(lista)))
+	return cons(lastItem(lista), invertir(rest(lista)))
 }
 /**
  *  Concatena el valor al final de la lista.
@@ -158,11 +158,11 @@ function invertir(lista){
  * @Example appendMC([2,3,1],1600) -> Return [2,3,1,1600]
  * @Example appendMC(['adios','hola'],'nuevo') -> Return ['adios','hola','nuevo']
  */
-function appendMC(lista,valor){
+function appendMC(lista, valor) {
 	if (isEmpty(lista)) {
-		return cons(valor,lista)
+		return cons(valor, lista)
 	}
-	return cons(first(lista),appendMC(rest(lista),valor))
+	return cons(first(lista), appendMC(rest(lista), valor))
 }
 /**
  * Invierte el orden de los elementos de una lista.
@@ -173,9 +173,9 @@ function appendMC(lista,valor){
  * @Example invertir([2,3,1]) -> Return [2,3,1,1]
  * @Example invertir(['adios','hola']) -> Return ['hola','adios']
  */
-function invertir(lista){
-	if(isEmpty(lista)) return lista
-	return appendMC(invertir(rest(lista)),first(lista))
+function invertir(lista) {
+	if (isEmpty(lista)) return lista
+	return appendMC(invertir(rest(lista)), first(lista))
 }
 // console.log(invertir([]))
 // console.log(invertir([1]))
@@ -195,11 +195,11 @@ function invertir(lista){
 function fibonacci(number) {
 	return number < 1 ? 0 : number <= 2 ? 1 : fibonacci(number - 1) + fibonacci(number - 2);
 	//Este ternario es lo mismo que el siguiente bloque if (No se ejecuta) --->
-	if(number < 1){
+	if (number < 1) {
 		return 0
-	}else if(number <= 2){
+	} else if (number <= 2) {
 		return 1
-	}else{
+	} else {
 		return fibonacci(number - 1) + fibonacci(number - 2)
 	}
 }
@@ -214,8 +214,8 @@ function fibonacci(number) {
  * @Example fibolist(8) -> Return [0, 1, 1,  2,3, 5, 8, 13]
  */
 function fibolist(num) {
-	if(num <= 0 ) return []
-	return appendMC(fibolist(num-1),fibonacci(num-1))
+	if (num <= 0) return []
+	return appendMC(fibolist(num - 1), fibonacci(num - 1))
 }
 // console.log(fibolist(0));
 // console.log(fibolist(1));
@@ -232,7 +232,7 @@ function fibolist(num) {
  * @Example copy([[1],[2],[3]]) -> Return [ [ 1 ], [ 2 ], [ 3 ] ]
  * @Example copy([[1],[[2],[2]],[3,3,[3,3]]])) -> Return [ [ 1 ], [ [ 2 ], [ 2 ] ], [ 3, 3, [ 3, 3 ] ] ]
  */
-function copy(lista){
+function copy(lista) {
 	if (isEmpty(lista)) return lista
 	return cons(first(lista), rest(lista))
 }
@@ -253,10 +253,10 @@ function copy(lista){
  * @Example insertX(7,0,[]) -> Return [ 1, 0, 3, 5, 9, 3 ]
  * @Example insertX(8,-1,[1,0,3,5,9,3]) -> Return 125
  */
-function insertX(elem,posicion,lista){
+function insertX(elem, posicion, lista) {
 	// console.log(lista)
-	if( posicion == 0 ) return cons(elem,lista)
-	if(posicion >= 0 && posicion <= length(lista)) return cons(first(lista),insertX(elem,posicion-1,rest(lista)))
+	if (posicion == 0) return cons(elem, lista)
+	if (posicion >= 0 && posicion <= length(lista)) return cons(first(lista), insertX(elem, posicion - 1, rest(lista)))
 	return lista
 }
 // console.log(insertX(7,0,[1,2,3]))
@@ -278,10 +278,10 @@ function insertX(elem,posicion,lista){
  * @example replaceX(1,[1,2,3],7) -> return [ 1, 7, 3 ]
  * @example replaceX(0,[], 7) -> return [ 7 ]
  */
-function replaceX(posicion,lista,elem){
+function replaceX(posicion, lista, elem) {
 	// console.log(lista)
-	if(posicion > 0 && posicion < length(lista)) return cons(first(lista),replaceX(posicion-1,rest(lista),elem))
-	if( posicion == 0 && !isEmpty(lista) ) return cons(elem,rest(lista))
+	if (posicion > 0 && posicion < length(lista)) return cons(first(lista), replaceX(posicion - 1, rest(lista), elem))
+	if (posicion == 0 && !isEmpty(lista)) return cons(elem, rest(lista))
 	return lista
 }
 // console.log(replaceX(0,[1,2,3],7))
@@ -300,10 +300,10 @@ function replaceX(posicion,lista,elem){
  * @example inLista([1,2,3,4], 3.5) -> return false
  * @example inLista([], 10) -> return false
  */
-function inLista(lista,elem){
-	if(isEmpty(lista)) return false;
-	if(first(lista) == elem) return true;
-	return inLista(rest(lista),elem);
+function inLista(lista, elem) {
+	if (isEmpty(lista)) return false;
+	if (JSON.stringify(first(lista)) == JSON.stringify(elem)) return true;
+	return inLista(rest(lista), elem);
 }
 /**
  * Retorna el índice n donde se encuentra el elemento elem si existe
@@ -315,11 +315,11 @@ function inLista(lista,elem){
  * @example lookupx([1,2,3,4], 3.5) -> return 3
  * @example lookupx([2,4,6,10], 10) -> return 3
  */
-function _lookupx(lista,elem) {
-	if(isEmpty(lista)) return 0
-	if(first(lista)==elem ) return 0
-	if(first(lista) < elem && first(rest(lista)) > elem) return 1
-	return 1+_lookupx(rest(lista),elem)
+function _lookupx(lista, elem) {
+	if (isEmpty(lista)) return 0
+	if (first(lista) == elem) return 0
+	if (first(lista) < elem && first(rest(lista)) > elem) return 1
+	return 1 + _lookupx(rest(lista), elem)
 }
 /**
  * Retorna el índice n donde se encuentra el elemento elem si existe, si no existe aplica -( n + 1 ).
@@ -331,9 +331,9 @@ function _lookupx(lista,elem) {
  * @example lookupx([1,2,3,4], 3.5) -> return -4
  * @example lookupx([2,4,6,10], 10) -> return 3
  */
-function lookupx(lista,elem) {
-	if (inLista(lista,elem)) return _lookupx(lista,elem);
-	return (_lookupx(lista,elem)+1)*-1
+function lookupx(lista, elem) {
+	if (inLista(lista, elem)) return _lookupx(lista, elem);
+	return (_lookupx(lista, elem) + 1) * -1
 }
 // console.log(lookupx([1,2,3,4], 2));
 // console.log(lookupx([1,2,3,4], 3.5));
@@ -351,11 +351,11 @@ function lookupx(lista,elem) {
  * @example insertInOrder([1,2,3,4], 3.5) -> return [ 1, 2, 3, 3.5, 4 ]
  * @example insertInOrder([2,4,6,10], 10) -> return [ 2, 4, 6, 10, 10 ]
  */
-function insertInOrder(lista,elem){
-	if(elem == null) return lista
-	if(isEmpty(lista)) return cons(elem,lista)
-	if(elem < first(lista)) return cons(elem,insertInOrder(lista),null)
-	return cons(first(lista),insertInOrder(rest(lista),elem))
+function insertInOrder(lista, elem) {
+	if (elem == null) return lista
+	if (isEmpty(lista)) return cons(elem, lista)
+	if (elem < first(lista)) return cons(elem, insertInOrder(lista), null)
+	return cons(first(lista), insertInOrder(rest(lista), elem))
 }
 // console.log(insertInOrder([], -2.3));
 // console.log(insertInOrder([-2, 3, 5, 5, 6 ], 4));
@@ -375,12 +375,12 @@ function insertInOrder(lista,elem){
  * @example lookupx([1,2,3,4], 3.5) -> return 3
  * @example lookupx([2,4,6,10], 10) -> return 3
  */
- function buscar(lista,elem) {
-	if(isEmpty(lista)) return 0
-	if(first(lista)==elem ) return 0
-	if(first(lista) < elem && first(rest(lista)) > elem) return 1
-	if (inLista(lista,elem)) {
-		return 1+buscar(rest(lista),elem)
+function buscar(lista, elem) {
+	if (isEmpty(lista)) return 0
+	if (first(lista) == elem) return 0
+	if (first(lista) < elem && first(rest(lista)) > elem) return 1
+	if (inLista(lista, elem)) {
+		return 1 + buscar(rest(lista), elem)
 	} else {
 		return -1
 	}
@@ -399,10 +399,10 @@ function insertInOrder(lista,elem){
  * @example deleteN([1,2,3,4], 3) -> return [1,2,3]
  * @example deleteN([2,4,6,10], 10) -> return [2,4,6,10]
  */
-function deleteN(lista,indice){
+function deleteN(lista, indice) {
 	if (indice > length(lista) || indice < 0) return lista
 	if (indice == 0) return rest(lista)
-	return cons(first(lista),deleteN(rest(lista),indice-1))
+	return cons(first(lista), deleteN(rest(lista), indice - 1))
 }
 // console.log(deleteN([1,2,3], 7));
 // console.log(deleteN([1,2,3], 1));
@@ -429,10 +429,10 @@ function deleteN(lista,indice){
  * @example deleteN([1,2,3,4], 3) -> return [1,2,3]
  * @example deleteN([2,4,6,10], 10) -> return [2,4,6,10]
  */
-function ordenar(lista){
-	if(isEmpty(lista)) return lista
-	if(isList(first(lista))) return cons(ordenar(first(lista)),rest(lista))
-	return cons(menorL(lista),ordenar(deleteN(lista,buscar(lista,menorL(lista)))))
+function ordenar(lista) {
+	if (isEmpty(lista)) return lista
+	if (isList(first(lista))) return cons(ordenar(first(lista)), rest(lista))
+	return cons(menorL(lista), ordenar(deleteN(lista, buscar(lista, menorL(lista)))))
 }
 // console.log(ordenar([3,5,3,4]))
 // console.log(ordenar([1,2,3,4]))
@@ -453,7 +453,7 @@ function filter(lista, filtro) {
 	if (isEmpty(lista)) return lista
 	else if (filtro(first(lista))) return cons(first(lista), filter(rest(lista), filtro))
 	else return filter(rest(lista), filtro)
-	
+
 }
 // console.log(filter([1, 3, 4, 6, 0, 1], (a) => a > 3))
 // console.log(filter(["ab", "acv", "gggg", "cds"], (a) => a.length == 3 ))
@@ -468,9 +468,9 @@ function filter(lista, filtro) {
  * @example map([{a: "María"}, {a: "Carlos"}], (v) => "Hola " + v.a) -> return [ 'Hola María', 'Hola Carlos' ]
  * @example map([2,3,4,6,10], (x) => Math.pow(x,2)) -> return [ 4, 9, 16, 36, 100 ]
  */
-function mapear(lista,method){
-	if(isEmpty(lista)) return lista;
-	return cons(method(first(lista)),mapear(rest(lista),method))
+function mapear(lista, method) {
+	if (isEmpty(lista)) return lista;
+	return cons(method(first(lista)), mapear(rest(lista), method))
 }
 // console.log(map([1, 2, 3, 4], (x) => x * x))
 // console.log(map([{a: "María"}, {a: "Carlos"}], (v) => "Hola " + v.a))
@@ -486,9 +486,9 @@ function mapear(lista,method){
  * @example reduce([1, 7, 3, 14, 5], (val, acum) => Math.min(val, acum), 9999) -> return 1
  * @example reduce([1, 2, 3, 4, 5], (val, acum) => acum + val, 0) -> return 15
  */
-function reduce(lista,method,acum){
+function reduce(lista, method, acum) {
 	if (isEmpty(lista)) return acum
-	return method(first(lista),reduce(rest(lista),method,acum))
+	return method(first(lista), reduce(rest(lista), method, acum))
 }
 // console.log(reduce([1, 2, 3, 4, 5], (val, acum) => acum + val, 0));
 // console.log(reduce([1, 2, 3, 4, 5], (val, acum) => acum * val, 1));
@@ -496,11 +496,15 @@ function reduce(lista,method,acum){
 // console.log(reduce([1, 7, 3, 14, 5], (val, acum) => Math.min(val, acum), 9999));
 // console.log(reduce([{a: "María"}, {a: "Carlos"}], (val, acum) => acum + "-" +val.a, ""))
 
-function filtrar(inventario){
+function filtrar(inventario) {
 	if (isEmpty(inventario)) return inventario;
 	if (first(inventario)['costo'] < 10) {
-		return cons(first(inventario),filtrar(rest(inventario)))
-	}else{
+		return cons(first(inventario), filtrar(rest(inventario)))
+	} else {
 		return filtrar(rest(inventario))
 	}
+}
+
+function objectEquals(obj1, obj2) {
+	return JSON.stringify(obj1) == JSON.stringify(obj2)
 }

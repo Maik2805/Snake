@@ -14,7 +14,8 @@
     /* -webkit-background-clip: text; */
     /* -webkit-text-fill-color: transparent; */
     background-clip: text;
-    font: normal 100 40px/5px var(--retro);
+    font: normal 100 50px/5px var(--retro);
+    margin: 15px;
 }
 
 .site-main .game {
@@ -24,8 +25,8 @@
     justify-content: center;
 }
 
-#juegoCanvas {
-    border: 2px solid white;
+#canvas-holder {
+    border: 10px solid white;
 }
 
 .button {
@@ -43,4 +44,56 @@
 
 .button5 {
     border-radius: 20%;
+}
+
+.info-game {
+    display: grid;
+    grid-template-columns: auto auto;
+    /* background-color: #2196F3; */
+    padding: 4px;
+    /* grid-template-columns: 50% 50%; */
+    grid-template-rows: 40px;
+}
+
+.info-game-item,
+.info-game-item h3 {
+    /* background-color: rgba(11, 35, 248, 0.8); */
+    /* border: 1px solid rgba(0, 0, 0, 0.8); */
+    padding: 0px;
+    /* margin: 0px; */
+    color: black;
+
+    /* height: 15px; */
+    /* font-size: 5px; */
+}
+
+.al-left {
+    text-align: left;
+}
+
+.al-right {
+    text-align: right;
+}
+
+.heart {
+    color: red;
+}
+
+.div-puntaje {
+    text-transform: capitalize;
+    /* height: 3rem; */
+    text-shadow: 10px 10px 30px rgb(0, 4, 255);
+    /* -webkit-background-clip: text; */
+    /* -webkit-text-fill-color: transparent; */
+    background-clip: text;
+    font: normal 10 20px/1px var(--retro);
+    /* vertical-align: text-bottom; */
+    /* padding-top: 1px; */
+
+}
+
+.div-lives {
+    text-shadow: 10px 10px 30px rgb(255, 255, 255);
+    vertical-align: text-bottom;
+    padding-top: 5px;
 }

@@ -1,23 +1,44 @@
 let { append, cons, first, isEmpty, isList, length, rest, map, forEach } = functionalLight;
+//Longitudes del snake
+// const CUADRICULA = 
+const dx = 20;
+const dy = 20;
+
+const CanvasX = 460;
+const CanvasY = 460;
+const FPS = 5;
 
 // Actualiza los atributos del objeto y retorna una copia profunda
 function update(data, attribute) {
     return Object.assign({}, data, attribute);
 }
 const lblScore = document.getElementById('lbl-score');
+const livesField = document.getElementById('lives-container');
+const ESTADOS = {
+    RUNNING: 1,
+    PAUSED: 2,
+    FINISHED: 3
+}
 
 //////////////////////// Mundo inicial
 const MundoBase = {
-    snake: [{ x: 1, y: 5 }, { x: 0, y: 5 }],
+    snake: [{ x: 3, y: 3 }, { x: 2, y: 3 }],
     dir: { y: 0, x: 1 },
     food: { x: 5, y: 5 },
     velocity: 5,
     score: setScore(100),
     lives: 3,
-    tic: true
+    isSuper: { value: false, count: 0 },
+    tic: true,
+    status: ESTADOS.PAUSED,
+    record: false,
+    genPower: {
+        value: false,
+        powerXY: null
+    },
 }
 
-var Mundo = update(Mundo, MundoBase)
+var Mundo = update({}, update(MundoBase, { food: drawFood(MundoBase) }))
 
 const DIRECCIONES = {
     left: { y: 0, x: -1 },
@@ -25,31 +46,41 @@ const DIRECCIONES = {
     up: { y: -1, x: 0 },
     down: { y: 1, x: 0 }
 }
-////////////////////////
+
 /**
  * Actualiza la serpiente. Creando una nuevo cabeza y removiendo la cola
  */
 function moveSnake(mundo, dir) {
-    const head = first(mundo.snake);
-    if (colision(mundo.snake)) {
-        return updateInterfaz(MundoBase);
+    if (mundo.isSuper.value) {
+        console.log('is super: ', mundo.isSuper.value)
+        // throw Error('stop')
     }
-
+    const head = first(mundo.snake);
+    const isSuper = mundo.isSuper;
+    if (colision(mundo.snake) && !isSuper.value) {
+        frameRate(MundoBase.velocity)
+        return updateInterfaz(update(MundoBase, colisionWorld(mundo)));
+    }
+    const Powered = {
+        value: snakeAtePower(mundo) || isSuper.count > 0,
+        count: (snakeAtePower(mundo)) ? 100 : isSuper.count - 1
+    }
+    const newHead = (Powered.value && colision(mundo.snake)) ? headInvert(mundo) : { x: head.x + dir.x, y: head.y + dir.y }
     if (snakeAte(mundo)) {
-        frameRate(mundo.velocity++);
-        return { snake: cons({ x: head.x + dir.x, y: head.y + dir.y }, mundo.snake), food: drawFood(mundo), velocity: mundo.velocity++, score: setScore(mundo.score + 100) };
+        const newVelocity = (mundo.velocity <= 25) ? mundo.velocity + 1 : mundo.velocity;
+        const newScore = mundo.score + 100;
+        frameRate(newVelocity);
+        const gotPower = newScore % 500 == 0
+        const newGenPower = {
+            value: gotPower,
+            powerXY: (gotPower) ? drawFood(mundo) : false
+        }
+        return { snake: cons(newHead, mundo.snake), food: drawFood(mundo), velocity: newVelocity, score: setScore(newScore), genPower: newGenPower, isSuper: Powered };
     } else {
-        return { snake: cons({ x: head.x + dir.x, y: head.y + dir.y }, mundo.snake.slice(0, length(mundo.snake) - 1)) };
+        return { snake: cons(newHead, mundo.snake.slice(0, length(mundo.snake) - 1)), isSuper: Powered };
     }
 }
 
-//Longitudes del snake
-// const CUADRICULA = 
-const dx = 20;
-const dy = 20;
-const CanvasX = 400;
-const CanvasY = 400;
-const FPS = 5;
 
 
 /**
@@ -63,19 +94,50 @@ function setup() {
     background(0, 0, 0);
 }
 
-// Dibuja algo en el canvas. Aqui se pone todo lo que quieras pintar
+// Dibuja el canvas.
 function drawGame(mundo) {
-    background(0, 0, 0);
-    fill(143, 253, 0);
+    // console.log(mundo)
+    if (mundo.status != ESTADOS.RUNNING) {
+        textStyle(BOLDITALIC);
+        // console.log(mundo);
+        // throw Error('Error')
+        fill(143, 253, 0);
+        textSize(30);
+        textAlign(CENTER, BASELINE);
+        text("Enter para empezar!", 0, 80, width);
+        text("Muévete con ↑ ↓ → ←", 0, 160, width);
+        if (mundo.record) {
+            fill(252, 244, 0);
+            text("PUNTAJE FINAL:", 0, 240, width);
+            fill(255, 31, 0);
+            textSize(38);
+            text(mundo.record, 0, 320, width);
+            updateInterfaz({ lives: 0, score: mundo.record })
+        }
+        frameRate(0)
+    } else {
+        background(0, 0, 0);
+        fill(143, 253, 0);
+        if (mundo.isSuper.value) {
+            fill(255, 255, 255);
 
-    //pinta la culebra
-    forEach(mundo.snake, s => {
-        rect(s.x * dx, s.y * dy, dx, dy);
-    });
+        }
+        //pinta la culebra
+        forEach(mundo.snake, s => {
+            rect(s.x * dx, s.y * dy, dx, dy);
+        });
 
-    //Pinta la comida
-    fill(4, 0, 255);
-    rect(mundo.food.x * dx, mundo.food.y * dy, dx, dy, 20)
+        //Pinta la comida
+        fill(4, 0, 255);
+        rect(mundo.food.x * dx, mundo.food.y * dy, dx, dy, 20)
+        if (mundo.genPower.value && !mundo.isSuper.value) {
+            fill(255, 213, 59);
+            rect(mundo.genPower.powerXY.x * dx, mundo.genPower.powerXY.y * dy, dx, dy, 20)
+            // console.log(mundo)
+            // throw Error('AQUI')
+        }
+    }
+
     // console.log(mundo.snake)
 
 }
@@ -83,7 +145,11 @@ function drawGame(mundo) {
 
 // Esto se ejecuta en cada tic del reloj. Con esto se pueden hacer animaciones
 function onTic(mundo) {
-    // updateInterface(mundo)
+    // console.log('tic', mundo)
+    if (mundo.record)
+        updateInterfaz({ lives: 0, score: mundo.record })
+    else
+        updateInterfaz(mundo)
     return update(mundo, update(moveSnake(mundo, Mundo.dir), { tic: true }));
 }
 
@@ -97,7 +163,6 @@ function onMouseEvent(Mundo, event) {
 * Actualiza el mundo cada vez que se oprime una tecla. Retorna el nuevo stado del mundo
 */
 function onKeyEvent(mundo, keyCode) {
-    // console.log(keyCode)
     if (mundo.tic) {
 
         switch (keyCode) {
@@ -125,8 +190,9 @@ function onKeyEvent(mundo, keyCode) {
                     return update(mundo, { dir: DIRECCIONES.left, tic: false })
                 return update(mundo, { dir: { y: 0, x: 1 }, tic: false });
                 break;
-            // case 13:
-            //     throw pausa()
+            case 13:
+                frameRate(mundo.velocity)
+                return update(mundo, initGame());
             default:
 
                 return update(mundo, {});
@@ -171,7 +237,7 @@ function mouseClicked() {
 // // Estas funciones controlan los eventos del mouse.
 // // No cambie estas funciones. Su código debe ir en OnMouseEvent
 // function mousePressed() {
-//     Mundo = onMouseEvent(Mundo,
+//     Mundo = onMouseEvent(Mundo,draw
 //         { action: "press", mouseX: mouseX, mouseY: mouseY, mouseButton: mouseButton });
 // }
 // // Estas funciones controlan los eventos del mouse.
@@ -191,7 +257,6 @@ function snakeAte(mundo) {
 }
 
 function drawFood(mundo) {
-    // return update(mundo, mundo.food = { x: 10, y: 10 })
     const genNewComida = () => {
         const posX = Math.max(Math.floor(Math.random() * getCuadrosX()), 1);
         const posY = Math.max(Math.floor(Math.random() * getCuadrosY()), 1);
@@ -227,14 +292,93 @@ function setScore(score) {
     lblScore.innerHTML = score
     return score
 }
-function setLives() {
-
+function setLives(mundo) {
+    const texto = stringRepeat(`<i class="fas fa-heart fa-2x heart"></i>`, mundo);
+    livesField.innerHTML = texto;
 }
 function updateInterfaz(mundo) {
-    // setLives(mundo.lives)
-    setScore(mundo.score)
+    // console.log(mundo)
+    if (mundo.record) {
+        setLives(0)
+        setScore(mundo.record)
+        // return update(MundoBase, { record: false })
+        // return update(mundo, { lives: MundoBase.lives, record: false });
+    } else {
+        setLives(mundo.lives)
+        setScore(mundo.score)
+    }
     return mundo;
 }
+
+function colisionWorld(mundo) {
+    const lose = mundo.lives - 1 == 0;
+    const newLives = (lose) ? MundoBase.lives : mundo.lives - 1;
+    const newScore = (lose) ? MundoBase.score : mundo.score;
+    const newStatus = (lose) ? ESTADOS.FINISHED : ESTADOS.RUNNING;
+    const newRecord = (lose) ? mundo.score : false;
+    return { lives: newLives, score: newScore, status: newStatus, record: newRecord, velocity: MundoBase.velocity }
+}
+function initGame() {
+    return {
+        status: ESTADOS.RUNNING,
+        lives: MundoBase.lives,
+        score: MundoBase.score,
+        record: MundoBase.record,
+        food: drawFood(MundoBase),
+        velocity: MundoBase.velocity,
+        isSuper: MundoBase.isSuper
+    }
+}
+
+function snakeAtePower(mundo) {
+    // const head = first(mundo.snake);
+    if (mundo.genPower.value) {
+        // console.log(mundo)
+        const snake = mundo.snake
+        const head = first(snake);
+        const comioPoder = head.x == mundo.genPower.powerXY.x && head.y == mundo.genPower.powerXY.y
+        // console.log('comiopoder: ', comioPoder)
+        return comioPoder;
+    }
+    return false
+}
+
+function headInvert(mundo) {
+    // const snake = mundo.snake
+    //isborder: (head.x < 0 || head.x > getCuadrosX()) || (head.y < 0 || head.y > getCuadrosY())
+    const head = first(mundo.snake);
+    // var
+    // var newX;
+    const newX = (head.x < 0 || head.x > getCuadrosX()) ?
+        ((head.x <= 0) ? Math.trunc(getCuadrosX()) : 0)
+        : head.x;
+    const newY = (head.y < 0 || head.y > getCuadrosY()) ?
+        ((head.y <= 0) ? Math.trunc(getCuadrosY()) : 0)
+        : head.y;
+    // if (head.x < 0 || head.x > getCuadrosX()) {
+    //     var newX = (head.x <= 0) ? Math.trunc(getCuadrosX()) : 0;
+    //     // const newX = Math.trunc(CanvasX / 20)
+    // } else {
+    //     var newX = head.x;
+    // }
+    // if (head.y < 0 || head.y > getCuadrosY()) {
+    //     var newY = (head.y <= 0) ? Math.trunc(getCuadrosY()) : 0;
+    //     // const newX = Math.trunc(CanvasX / 20)
+    // } else {
+    //     var newY = head.y;
+    // }
+    return { x: newX, y: newY }
+    console.log({ x: newX, y: newY })
+    throw Error('stop')
+    const newHead = { x: newX, y: newY }
+
+    //     const dx = 20;
+    // const dy = 20;
+
+    // const CanvasX = 460;
+    // const CanvasY = 460;
+}
+
 
 // console.log(Math.max(Math.floor(Math.random() * (400 / 20)), 1))
 

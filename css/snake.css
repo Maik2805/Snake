@@ -1,9 +1,23 @@
 @import url('main.css');
 
+#boton-menu {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+}
+
+#boton-menu button:hover {
+    cursor: pointer;
+}
+
+.menu {
+    padding-top: 3rem;
+}
+
 .site-main .game-title {
     text-align: center;
     margin: auto;
-    padding-top: 2rem;
+    /* padding-top: 2rem; */
 }
 
 .site-main .game-title h1 {
@@ -61,7 +75,7 @@
     /* border: 1px solid rgba(0, 0, 0, 0.8); */
     padding: 0px;
     /* margin: 0px; */
-    color: black;
+    color: rgb(0, 46, 252);
 
     /* height: 15px; */
     /* font-size: 5px; */
@@ -82,7 +96,8 @@
 .div-puntaje {
     text-transform: capitalize;
     /* height: 3rem; */
-    text-shadow: 10px 10px 30px rgb(0, 4, 255);
+    text-shadow: 10px 10px 30px rgb(255, 255, 255);
+    /* text-shadow: 10px 10px 30px rgb(0, 4, 255); */
     /* -webkit-background-clip: text; */
     /* -webkit-text-fill-color: transparent; */
     background-clip: text;
@@ -96,4 +111,8 @@
     text-shadow: 10px 10px 30px rgb(255, 255, 255);
     vertical-align: text-bottom;
     padding-top: 5px;
+}
+
+#lbl-score {
+    text-shadow: 10px 10px 30px rgb(255, 255, 255);
 }

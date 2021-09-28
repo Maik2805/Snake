@@ -24,7 +24,7 @@
                 <a href="./pages/snake.html" class="title active">
                     PLAY
                 </a>
-                <a href="#OPCIONES" class="title">
+                <a href="#modal-members" rel="modal:open" class="title">
                     OPCIONES
                 </a>
                 <a href="#CREDITOS" class="title">
@@ -33,6 +33,17 @@
 
             </div>
         </section>
+
+
+        <div id="modal-members" class="modal">
+            <div class="members">
+                <h1>Andrea&nbsp;Solarte</h1>
+                <h1>Lesli&nbsp;Martínez</h1>
+                <h1>Larry&nbsp;Narvaez</h1>
+                <h1>Camilo &nbsp;Gómez</h1>
+                <h1>Michael&nbsp;Cardenas</h1>
+            </div>
+        </div>
     </main>
     <script src="./js/jquery-3.6.0.min.js"></script>
     <!-- <script src="./js/p5.min.js"></script> -->
@@ -40,6 +51,15 @@
     <script src="./js/funciones-listas.js"></script>
     <script src="./js/main.js"></script>
     <script src="./js/home.js"></script>
+    <script src="./js/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="./css/jquery.modal.min.css" />
+    <audio autoplay loop id="background-sound">
+        <source src="assets/sounds/background2.wav" type="audio/wav" />
+    </audio>
+    <script>
+        var audio = document.getElementById("background-sound");
+        audio.volume = 0.7;
+    </script>
 </body>
 
 </html>

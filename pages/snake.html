@@ -13,6 +13,7 @@
     <script src="../js/p5.min.js"></script>
     <script src="../js/functional-light.js"></script>
     <script src="../js/funciones-listas.js"></script>
+    <script src="../js/p5.sound.min.js"></script>
     <!-- <script src="../js/p5js2functional.js"></script> -->
 </head>
 
@@ -45,6 +46,15 @@
     </main>
     <!-- <script src="../js/jquery-3.6.0.min.js"></script> -->
     <!-- <script src="../js/main.js"></script> -->
+    <!-- <embed src="../assets/sounds/background2.wav" loop="true" autostart="true" width="2" height="0"> -->
+    <!-- <audio src="../assets/sounds/background.wav"></audio> -->
+    <audio autoplay loop id="background-sound">
+        <source src="../assets/sounds/background2.wav" type="audio/wav" />
+    </audio>
+    <script>
+        var audio = document.getElementById("background-sound");
+        audio.volume = 0.7;
+    </script>
 </body>
 
 </html>

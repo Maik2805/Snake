@@ -8,6 +8,17 @@ const CanvasX = 460;
 const CanvasY = 460;
 const FPS = 5;
 
+let coinSound, powerSound, lose, loseLiveSound, backgroundSound;
+function preload() {
+    soundFormats('wav', 'ogg');
+    coinSound = loadSound('../assets/sounds/coin.wav');
+    powerSound = loadSound('../assets/sounds/power.wav');
+    loseSound = loadSound('../assets/sounds/lose.wav');
+    loseLiveSound = loadSound('../assets/sounds/loseLive.wav');
+    // backgroundSound = loadSound('../assets/sounds/background.wav');
+
+}
+
 // Actualiza los atributos del objeto y retorna una copia profunda
 function update(data, attribute) {
     return Object.assign({}, data, attribute);
@@ -55,7 +66,8 @@ function moveSnake(mundo, dir) {
         console.log('is super: ', mundo.isSuper.value)
         // throw Error('stop')
     }
-    const head = first(mundo.snake);
+    const snake = mundo.snake;
+    const head = first(snake);
     const isSuper = mundo.isSuper;
     if (colision(mundo.snake) && !isSuper.value) {
         frameRate(MundoBase.velocity)
@@ -65,8 +77,9 @@ function moveSnake(mundo, dir) {
         value: snakeAtePower(mundo) || isSuper.count > 0,
         count: (snakeAtePower(mundo)) ? 100 : isSuper.count - 1
     }
-    const newHead = (Powered.value && colision(mundo.snake)) ? headInvert(mundo) : { x: head.x + dir.x, y: head.y + dir.y }
+    const newHead = (Powered.value && colision(mundo.snake) && (!inLista(rest(snake), first(snake)))) ? headInvert(mundo) : { x: head.x + dir.x, y: head.y + dir.y }
     if (snakeAte(mundo)) {
+        coinSound.play();
         const newVelocity = (mundo.velocity <= 25) ? mundo.velocity + 1 : mundo.velocity;
         const newScore = mundo.score + 100;
         frameRate(newVelocity);
@@ -132,6 +145,7 @@ function drawGame(mundo) {
         rect(mundo.food.x * dx, mundo.food.y * dy, dx, dy, 20)
         if (mundo.genPower.value && !mundo.isSuper.value) {
             fill(255, 213, 59);
+            // star((mundo.genPower.powerXY.x * dx) + 5, (mundo.genPower.powerXY.y * dy) + 5, 7, 12, 5);
             rect(mundo.genPower.powerXY.x * dx, mundo.genPower.powerXY.y * dy, dx, dy, 20)
             // console.log(mundo)
             // throw Error('AQUI')
@@ -316,6 +330,10 @@ function colisionWorld(mundo) {
     const newScore = (lose) ? MundoBase.score : mundo.score;
     const newStatus = (lose) ? ESTADOS.FINISHED : ESTADOS.RUNNING;
     const newRecord = (lose) ? mundo.score : false;
+    if (lose)
+        loseSound.play()
+    else
+        loseLiveSound.play()
     return { lives: newLives, score: newScore, status: newStatus, record: newRecord, velocity: MundoBase.velocity }
 }
 function initGame() {
@@ -338,6 +356,8 @@ function snakeAtePower(mundo) {
         const head = first(snake);
         const comioPoder = head.x == mundo.genPower.powerXY.x && head.y == mundo.genPower.powerXY.y
         // console.log('comiopoder: ', comioPoder)
+        if (comioPoder)
+            powerSound.play()
         return comioPoder;
     }
     return false
@@ -379,7 +399,17 @@ function headInvert(mundo) {
     // const CanvasY = 460;
 }
 
-
-// console.log(Math.max(Math.floor(Math.random() * (400 / 20)), 1))
-
-// console.log(JSON.stringify([1, 2]) == JSON.stringify([1, 2]))
+function star(x, y, radius1, radius2, npoints) {
+    let angle = TWO_PI / npoints;
+    let halfAngle = angle / 2.0;
+    beginShape();
+    for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a + halfAngle) * radius1;
+        sy = y + sin(a + halfAngle) * radius1;
+        vertex(sx, sy);
+    }
+    endShape(CLOSE);
+}

@@ -46,3 +46,4 @@ const prevOption = (lista) => {
     }
     return prevOption(rest(lista))
 }
+

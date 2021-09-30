@@ -48,7 +48,7 @@
 
 #modal-members {
     /* width: 100%; */
-    max-width: 90%;
+    max-width: 70%;
     text-align: center;
     background-color: rgb(56, 56, 56);
 
@@ -68,4 +68,21 @@
 
 .members h1 {
     margin: 40px;
+}
+
+table {
+    text-align: center;
+    align-items: center;
+    color: whitesmoke;
+    width: 100%;
+    font-size: x-large;
+    /* border: 1px solid black; */
+}
+
+tr {
+    height: 4rem;
+}
+
+#modal-opciones {
+    background-color: rgb(56, 56, 56);
 }

@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon"
+        href="https://png2.cleanpng.com/sh/34b25c00956acfcdf17553c18c1df223/L0KzQYm4UcIxN5h7fpH0aYP2gLBuTfNtcaEyeeR9LYPxcbzsk71kd551jeZucj3sc7F1k713bZR5hAQ2Z4LkgLnwgCMueJD3RadrZkTlQoXqU8Q2PZQ1Rqo8NUazSIq7UcU1Omg7S6IDNEK0RIW1kP5o/kisspng-clip-art-snakes-computer-icons-vector-graphics-por-5bf4b24c3455c0.8356089415427630842144.png">
     <title>Snake</title>
     <!-- Uso de Iconos -->
     <link rel="stylesheet" href="./css/all.min.css">
@@ -21,13 +23,13 @@
         </section>
         <section class="menu">
             <div class="menu-options">
-                <a href="./pages/snake.html" class="title active">
+                <a href="#" class="title active" id="btn-play" onclick="">
                     PLAY
                 </a>
-                <a href="#modal-members" rel="modal:open" class="title">
+                <a href="#modal-opciones" rel="modal:open" class="title">
                     OPCIONES
                 </a>
-                <a href="#CREDITOS" class="title">
+                <a href="#modal-members" rel="modal:open" class="title">
                     CREDITOS
                 </a>
 
@@ -44,6 +46,33 @@
                 <h1>Michael&nbsp;Cardenas</h1>
             </div>
         </div>
+        <div id="modal-opciones" class="modal">
+            <table>
+                <thead>
+                    <tr>
+
+                        <th>Color Snake</th>
+                        <th>Tamaño Tablero</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <form action="./pages/snake.html" method="get" id="form-options">
+                        <tr>
+                            <td>
+                                <input type="color" value="#8FFD00" name="snColor" id="colorPicker">
+
+                            </td>
+                            <td>
+                                <input type="radio" name="Tamaño" id="" value="Normal" checked>Normal
+                                <input type="radio" name="Tamaño" id="" value="Grande">Grande
+
+                            </td>
+
+                        </tr>
+                    </form>
+                </tbody>
+            </table>
+        </div>
     </main>
     <script src="./js/jquery-3.6.0.min.js"></script>
     <!-- <script src="./js/p5.min.js"></script> -->
@@ -58,7 +87,12 @@
     </audio>
     <script>
         var audio = document.getElementById("background-sound");
-        audio.volume = 0.7;
+        audio.volume = 0.65;
+        var form = document.getElementById("form-options");
+
+        document.getElementById("btn-play").addEventListener("click", function () {
+            form.submit();
+        });
     </script>
 </body>
 

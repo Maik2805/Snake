@@ -1,12 +1,23 @@
 let { append, cons, first, isEmpty, isList, length, rest, map, forEach } = functionalLight;
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
 //Longitudes del snake
 // const CUADRICULA = 
-const dx = 20;
-const dy = 20;
+const sizeBoard = {
+    Normal: 460,
+    Grande: 580
+}
+const dx = parseInt(getParametro('sizeX', 20));
+const dy = parseInt(getParametro('sizeY', 20));
+const tamañoParam = getParametro('Tamaño', 'Normal');
 
-const CanvasX = 460;
-const CanvasY = 460;
+// const CanvasY = getParametro('canvasY', 460);
+// const CanvasX = getParametro('canvasX', 580);
+const CanvasY = 460
+const CanvasX = sizeBoard[tamañoParam];
 const FPS = 5;
+const snakeColor = '' + getParametro('snColor', '#8FFD00')
+console.log(snakeColor)
 
 let coinSound, powerSound, lose, loseLiveSound, backgroundSound;
 function preload() {
@@ -31,7 +42,9 @@ const ESTADOS = {
     FINISHED: 3
 }
 
-//////////////////////// Mundo inicial
+/**
+ * Mundo Inicial
+ */
 const MundoBase = {
     snake: [{ x: 3, y: 3 }, { x: 2, y: 3 }],
     dir: { y: 0, x: 1 },
@@ -51,13 +64,15 @@ const MundoBase = {
 
 var Mundo = update({}, update(MundoBase, { food: drawFood(MundoBase) }))
 
+/**
+ * Constantes que define las direcciones del snake
+ */
 const DIRECCIONES = {
     left: { y: 0, x: -1 },
     right: { y: 0, x: 1 },
     up: { y: -1, x: 0 },
     down: { y: 1, x: 0 }
 }
-
 /**
  * Actualiza la serpiente. Creando una nuevo cabeza y removiendo la cola
  */
@@ -107,7 +122,9 @@ function setup() {
     background(0, 0, 0);
 }
 
-// Dibuja el canvas.
+/**
+ * Dibuja el canvas.
+ */
 function drawGame(mundo) {
     // console.log(mundo)
     if (mundo.status != ESTADOS.RUNNING) {
@@ -130,7 +147,7 @@ function drawGame(mundo) {
         frameRate(0)
     } else {
         background(0, 0, 0);
-        fill(143, 253, 0);
+        fill(snakeColor);
         if (mundo.isSuper.value) {
             fill(255, 255, 255);
 
@@ -157,7 +174,9 @@ function drawGame(mundo) {
 }
 
 
-// Esto se ejecuta en cada tic del reloj. Con esto se pueden hacer animaciones
+/**
+ * Esto se ejecuta en cada tic del reloj.
+ */
 function onTic(mundo) {
     // console.log('tic', mundo)
     if (mundo.record)
@@ -166,12 +185,6 @@ function onTic(mundo) {
         updateInterfaz(mundo)
     return update(mundo, update(moveSnake(mundo, Mundo.dir), { tic: true }));
 }
-
-//Implemente esta función si quiere que su programa reaccione a eventos del mouse
-function onMouseEvent(Mundo, event) {
-    return update(Mundo, {});
-}
-
 
 /**
 * Actualiza el mundo cada vez que se oprime una tecla. Retorna el nuevo stado del mundo
@@ -215,54 +228,24 @@ function onKeyEvent(mundo, keyCode) {
     return update(mundo, {});
 }
 
-//---------------------
-
+/**
+ * Pinta el mundo en el Canvas.
+ */
 function draw() {
     drawGame(Mundo);
     Mundo = onTic(Mundo);
 };
 
-// Esta función se ejecuta cada vez que presionamos una tecla.
-// No cambie esta función. Su código debe ir en onKeyEvent
+/**
+ * Listener de eventos del teclado, ejecuta el metodo onKeyEvent
+ */
 function keyPressed() {
     Mundo = onKeyEvent(Mundo, keyCode);
 }
 
-// Esta función se ejecuta cada vez movemos el mouse.
-// No cambie esta función. Su código debe ir en onMouseEvent
-// function mouseMoved() {
-//     Mundo = onMouseEvent(Mundo,
-//         { action: "move", mouseX: mouseX, mouseY: mouseY });
-// }
-
-// // Estas funciones controlan los eventos del mouse.
-// // No cambie estas funciones. Su código debe ir en OnMouseEvent
-function mouseClicked() {
-    Mundo = onMouseEvent(Mundo,
-        { action: "click", mouseX: mouseX, mouseY: mouseY, mouseButton: mouseButton });
-}
-// // Estas funciones controlan los eventos del mouse.
-// // No cambie estas funciones. Su código debe ir en OnMouseEvent
-// function mouseDragged() {
-//     Mundo = onMouseEvent(Mundo,
-//         { action: "drag", mouseX: mouseX, mouseY: mouseY, mouseButton: mouseButton });
-// }
-
-// // Estas funciones controlan los eventos del mouse.
-// // No cambie estas funciones. Su código debe ir en OnMouseEvent
-// function mousePressed() {
-//     Mundo = onMouseEvent(Mundo,draw
-//         { action: "press", mouseX: mouseX, mouseY: mouseY, mouseButton: mouseButton });
-// }
-// // Estas funciones controlan los eventos del mouse.
-// // No cambie estas funciones. Su código debe ir en OnMouseEvent
-// function mouseReleased() {
-//     Mundo = onMouseEvent(Mundo,
-//         { action: "release", mouseX: mouseX, mouseY: mouseY, mouseButton: mouseButton });
-// }
-
-// onTic(Mundo)
-
+/**
+ * Función que revisa si la serpiente comió.
+ */
 function snakeAte(mundo) {
     const snake = mundo.snake
     const head = first(snake);
@@ -270,6 +253,9 @@ function snakeAte(mundo) {
     return comio;
 }
 
+/**
+ * Función que genera una nueva posición de comida.
+ */
 function drawFood(mundo) {
     const genNewComida = () => {
         const posX = Math.max(Math.floor(Math.random() * getCuadrosX()), 1);
@@ -283,47 +269,66 @@ function drawFood(mundo) {
     return genNewComida();
 }
 
+/**
+ * Función que revisa la colisión de la serpiente con las paredes del canvas o con sí mismo.
+ */
 function colision(snake) {
     return (inLista(rest(snake), first(snake)) || isBorder(snake))
     return inLista(rest(snake), first(snake))
 }
 
-
+/**
+ * Función que determina si la cabeza de la serpiente se encuentra en el borde del canvas.
+ */
 function isBorder(snake) {
     const head = first(snake)
     return (head.x < 0 || head.x > getCuadrosX()) || (head.y < 0 || head.y > getCuadrosY())
 }
 
+/**
+ * Calcula la cantidad de cuadros del Canvas en el eje X
+ */
 function getCuadrosX() {
     return (CanvasX / dx) - 1
 }
 
+/**
+ * Calcula la cantidad de cuadros del Canvas en el eje Y
+ */
 function getCuadrosY() {
     return (CanvasY / dy) - 1
 }
 
+/**
+ * Actualiza e contenedor de Puntos
+ */
 function setScore(score) {
     lblScore.innerHTML = score
     return score
 }
+/**
+ * Actualiza e contenedor de Vidas
+ */
 function setLives(mundo) {
     const texto = stringRepeat(`<i class="fas fa-heart fa-2x heart"></i>`, mundo);
     livesField.innerHTML = texto;
 }
+/**
+ * Actualiza la interfaz de Puntos y Vidas.
+ */
 function updateInterfaz(mundo) {
-    // console.log(mundo)
     if (mundo.record) {
         setLives(0)
         setScore(mundo.record)
-        // return update(MundoBase, { record: false })
-        // return update(mundo, { lives: MundoBase.lives, record: false });
     } else {
         setLives(mundo.lives)
         setScore(mundo.score)
     }
     return mundo;
 }
-
+/**
+ * Función que reinicia el estado del juego dependiendo si las vidas llegan a 0 (pierde).
+ */
 function colisionWorld(mundo) {
     const lose = mundo.lives - 1 == 0;
     const newLives = (lose) ? MundoBase.lives : mundo.lives - 1;
@@ -336,6 +341,9 @@ function colisionWorld(mundo) {
         loseLiveSound.play()
     return { lives: newLives, score: newScore, status: newStatus, record: newRecord, velocity: MundoBase.velocity }
 }
+/**
+ * Función que define los parametros iniciales de cada partida.
+ */
 function initGame() {
     return {
         status: ESTADOS.RUNNING,
@@ -348,6 +356,9 @@ function initGame() {
     }
 }
 
+/**
+ * Función que revisa si la serpiente adquirio un poder.
+ */
 function snakeAtePower(mundo) {
     // const head = first(mundo.snake);
     if (mundo.genPower.value) {
@@ -363,53 +374,27 @@ function snakeAtePower(mundo) {
     return false
 }
 
+/**
+ * Función que proyecta la cabeza de la serpiente al lado contrario de donde se encuentra.
+ */
 function headInvert(mundo) {
     // const snake = mundo.snake
     //isborder: (head.x < 0 || head.x > getCuadrosX()) || (head.y < 0 || head.y > getCuadrosY())
     const head = first(mundo.snake);
-    // var
-    // var newX;
     const newX = (head.x < 0 || head.x > getCuadrosX()) ?
         ((head.x <= 0) ? Math.trunc(getCuadrosX()) : 0)
         : head.x;
     const newY = (head.y < 0 || head.y > getCuadrosY()) ?
         ((head.y <= 0) ? Math.trunc(getCuadrosY()) : 0)
         : head.y;
-    // if (head.x < 0 || head.x > getCuadrosX()) {
-    //     var newX = (head.x <= 0) ? Math.trunc(getCuadrosX()) : 0;
-    //     // const newX = Math.trunc(CanvasX / 20)
-    // } else {
-    //     var newX = head.x;
-    // }
-    // if (head.y < 0 || head.y > getCuadrosY()) {
-    //     var newY = (head.y <= 0) ? Math.trunc(getCuadrosY()) : 0;
-    //     // const newX = Math.trunc(CanvasX / 20)
-    // } else {
-    //     var newY = head.y;
-    // }
     return { x: newX, y: newY }
-    console.log({ x: newX, y: newY })
-    throw Error('stop')
-    const newHead = { x: newX, y: newY }
-
-    //     const dx = 20;
-    // const dy = 20;
-
-    // const CanvasX = 460;
-    // const CanvasY = 460;
 }
 
-function star(x, y, radius1, radius2, npoints) {
-    let angle = TWO_PI / npoints;
-    let halfAngle = angle / 2.0;
-    beginShape();
-    for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius2;
-        let sy = y + sin(a) * radius2;
-        vertex(sx, sy);
-        sx = x + cos(a + halfAngle) * radius1;
-        sy = y + sin(a + halfAngle) * radius1;
-        vertex(sx, sy);
-    }
-    endShape(CLOSE);
+/**
+ * Función que obtiene el aprametro deseado de la URL , o retorna un valor pre definido.
+ */
+function getParametro(name, def) {
+    if (urlParams.has(name))
+        return urlParams.get(name)
+    return def
 }

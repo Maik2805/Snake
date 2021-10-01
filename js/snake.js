@@ -2,7 +2,6 @@ let { append, cons, first, isEmpty, isList, length, rest, map, forEach } = funct
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 //Longitudes del snake
-// const CUADRICULA = 
 const sizeBoard = {
     Normal: 460,
     Grande: 580
@@ -11,8 +10,6 @@ const dx = parseInt(getParametro('sizeX', 20));
 const dy = parseInt(getParametro('sizeY', 20));
 const tamañoParam = getParametro('Tamaño', 'Normal');
 
-// const CanvasY = getParametro('canvasY', 460);
-// const CanvasX = getParametro('canvasX', 580);
 const CanvasY = 460
 const CanvasX = sizeBoard[tamañoParam];
 const FPS = 5;
@@ -26,8 +23,6 @@ function preload() {
     powerSound = loadSound('../assets/sounds/power.wav');
     loseSound = loadSound('../assets/sounds/lose.wav');
     loseLiveSound = loadSound('../assets/sounds/loseLive.wav');
-    // backgroundSound = loadSound('../assets/sounds/background.wav');
-
 }
 
 // Actualiza los atributos del objeto y retorna una copia profunda
@@ -118,7 +113,6 @@ function setup() {
     var canvas = createCanvas(CanvasX, CanvasY);
     canvas.parent('canvas-holder');
     frameRate(Mundo.velocity);
-    // var canvas = createCanvas(400, 400);
     background(0, 0, 0);
 }
 
@@ -126,11 +120,8 @@ function setup() {
  * Dibuja el canvas.
  */
 function drawGame(mundo) {
-    // console.log(mundo)
     if (mundo.status != ESTADOS.RUNNING) {
         textStyle(BOLDITALIC);
-        // console.log(mundo);
-        // throw Error('Error')
         fill(143, 253, 0);
         textSize(30);
         textAlign(CENTER, BASELINE);
@@ -162,15 +153,9 @@ function drawGame(mundo) {
         rect(mundo.food.x * dx, mundo.food.y * dy, dx, dy, 20)
         if (mundo.genPower.value && !mundo.isSuper.value) {
             fill(255, 213, 59);
-            // star((mundo.genPower.powerXY.x * dx) + 5, (mundo.genPower.powerXY.y * dy) + 5, 7, 12, 5);
             rect(mundo.genPower.powerXY.x * dx, mundo.genPower.powerXY.y * dy, dx, dy, 20)
-            // console.log(mundo)
-            // throw Error('AQUI')
         }
     }
-
-    // console.log(mundo.snake)
-
 }
 
 
@@ -178,7 +163,6 @@ function drawGame(mundo) {
  * Esto se ejecuta en cada tic del reloj.
  */
 function onTic(mundo) {
-    // console.log('tic', mundo)
     if (mundo.record)
         updateInterfaz({ lives: 0, score: mundo.record })
     else
@@ -378,8 +362,6 @@ function snakeAtePower(mundo) {
  * Función que proyecta la cabeza de la serpiente al lado contrario de donde se encuentra.
  */
 function headInvert(mundo) {
-    // const snake = mundo.snake
-    //isborder: (head.x < 0 || head.x > getCuadrosX()) || (head.y < 0 || head.y > getCuadrosY())
     const head = first(mundo.snake);
     const newX = (head.x < 0 || head.x > getCuadrosX()) ?
         ((head.x <= 0) ? Math.trunc(getCuadrosX()) : 0)
